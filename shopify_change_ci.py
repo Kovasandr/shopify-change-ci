@@ -33,6 +33,7 @@ def main():
     ap=argparse.ArgumentParser(description="Shopify breaking-change static preflight scanner")
     ap.add_argument("path",nargs="?",default=".")
     ap.add_argument("--json",action="store_true")
+    ap.add_argument("--report",metavar="FILE",help="Write a client-ready Markdown compatibility report")
     a=ap.parse_args()
     findings=scan(a.path)
     if a.json:
