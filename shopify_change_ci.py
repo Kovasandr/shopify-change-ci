@@ -29,6 +29,42 @@ def scan(root):
                     out.append({"rule":rule["id"],"severity":rule["severity"],"file":str(p.relative_to(root)),"line":n,"message":rule["message"],"excerpt":line.strip()[:240]})
     return out
 
+def write_report(findings, output_file):
+    counts={severity:sum(1 for x in findings if x["severity"]==severity) for severity in ("high","medium")}
+    risk="HIGH" if counts["high"] else ("MEDIUM" if counts["medium"] else "LOW")
+    lines=[
+        "# Shopify Breaking-Change Compatibility Report",
+        "",
+        f"**Overall risk:** {risk}",
+        f"**Findings:** {len(findings)} ({counts['high']} high, {counts['medium']} medium)",
+        "",
+        "## Executive summary",
+        "This static preflight identifies Shopify API/version and integration patterns that should be reviewed before platform changes reach production.",
+        "",
+        "## Prioritized findings",
+    ]
+    if not findings:
+        lines += ["No configured compatibility risks were detected.", ""]
+    for i,x in enumerate(findings,1):
+        lines += [
+            f"### {i}. {x['rule']} — {x['severity'].upper()}",
+            f"**Location:** `{x['file']}:{x['line']}`",
+            f"**Why it matters:** {x['message']}",
+            f"**Evidence:** `{x['excerpt']}`",
+            "**Recommended action:** Upgrade or migrate the affected Shopify surface, then regression-test the impacted workflow against the target stable API version.",
+            "",
+        ]
+    lines += [
+        "## Recommended next steps",
+        "1. Resolve HIGH findings before the next production release.",
+        "2. Validate MEDIUM findings in a Shopify development store or equivalent regression environment.",
+        "3. Add this scanner to CI so the same risk patterns cannot silently return.",
+        "",
+        "## Scope and limitations",
+        "This is a static compatibility preflight, not proof that an integration will fail. Runtime behavior, Shopify configuration, scopes, app-specific business logic, and external systems require separate regression testing.",
+    ]
+    Path(output_file).write_text("\n".join(lines)+"\n",encoding="utf-8")
+
 def main():
     ap=argparse.ArgumentParser(description="Shopify breaking-change static preflight scanner")
     ap.add_argument("path",nargs="?",default=".")
@@ -36,12 +72,14 @@ def main():
     ap.add_argument("--report",metavar="FILE",help="Write a client-ready Markdown compatibility report")
     a=ap.parse_args()
     findings=scan(a.path)
+    if a.report:
+        write_report(findings,a.report)
     if a.json:
         print(json.dumps({"findings":findings,"count":len(findings)},indent=2))
     else:
         for x in findings:
-            print(f'[{x["severity"].upper()}] {x["file"]}:{x["line"]} {x["rule"]}\n  {x["message"]}\n  {x["excerpt"]}')
-        print(f"\n{len(findings)} finding(s)")
+            print(f'[{x["severity"].upper()}] {x["file"]}:{x["line"]} {x["rule"]}\\n  {x["message"]}\\n  {x["excerpt"]}')
+        print(f"\\n{len(findings)} finding(s)")
     raise SystemExit(1 if any(x["severity"]=="high" for x in findings) else 0)
 
 if __name__=="__main__":
