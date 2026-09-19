@@ -1,0 +1,48 @@
+name: Shopify Compatibility Audit Request
+description: Request a $99 one-time compatibility audit for a Shopify app repository.
+title: "Audit request: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## $99 Shopify Compatibility Audit
+        Request a repository preflight before paying. I first confirm that the repository is scannable; payment is requested only after that confirmation.
+
+        **Do not paste private source code, access tokens, secrets, or credentials into this issue.** For private repositories, submit only non-sensitive metadata below; private access is arranged separately.
+  - type: dropdown
+    id: visibility
+    attributes:
+      label: Repository visibility
+      options:
+        - Public
+        - Private
+    validations:
+      required: true
+  - type: input
+    id: repository
+    attributes:
+      label: Public repository URL
+      description: Required only for a public repository. Leave blank for private repositories.
+      placeholder: https://github.com/owner/repository
+  - type: input
+    id: framework
+    attributes:
+      label: App stack / framework
+      description: Optional, but helps qualify the audit quickly.
+      placeholder: Remix + TypeScript, Rails, PHP, custom Node.js, etc.
+  - type: textarea
+    id: concern
+    attributes:
+      label: What are you worried about?
+      description: Optional. Mention an API upgrade, checkout/customer-account change, deprecated surface, or production risk.
+      placeholder: We need to upgrade our Shopify API version and want to know what could break.
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: Confirmation
+      options:
+        - label: I understand this is a $99 one-time audit if the repository is accepted, and no payment is required to submit this request.
+          required: true
+        - label: I have not included source code, credentials, tokens, or other secrets in this public issue.
+          required: true
