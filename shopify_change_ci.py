@@ -3,14 +3,15 @@ import argparse, json, re
 from pathlib import Path
 
 RULES=[
- {"id":"old-api-version","severity":"high","pattern":r"(2024-(01|04|07|10)|2025-(01|04|07))","message":"Old Shopify API version detected. Upgrade and regression-test."},
+ {"id":"old-api-version","severity":"high","pattern":r"(2024-(01|04|07|10)|2025-(01|04|07))","message":"Unsupported Shopify API version detected. Upgrade and regression-test."},
+ {"id":"api-version-near-retirement","severity":"medium","pattern":r"2025-10","message":"Shopify API 2025-10 is near retirement (October 2026). Plan upgrade and regression-test now."},
  {"id":"rest-admin-products","severity":"high","pattern":r"/admin/api/[^/]+/(products|variants)(\\.json|/)","message":"Legacy REST product/variant Admin API usage detected. Migrate to GraphQL Admin API."},
  {"id":"legacy-price-rule","severity":"high","pattern":r"\\b(PriceRule|priceRule)\\b","message":"Legacy PriceRule surface detected; verify against the target Shopify API release."},
- {"id":"last-incomplete-checkout","severity":"high","pattern":r"\\blastIncompleteCheckout\\b","message":"Customer.lastIncompleteCheckout usage detected; verify target Customer Account API."},
+ {"id":"last-incomplete-checkout","severity":"high","pattern":r"\\blastIncompleteCheckout\\b","message":"Customer.lastIncompleteCheckout usage detected; verify target API and migration path."},
  {"id":"carrier-service-assumption","severity":"medium","pattern":r"\\bcarrierService(Create|Update)?\\b|/carrier_services","message":"Carrier service integration detected; regression-test shipping-profile behavior."},
  {"id":"checkout-ui-extension","severity":"medium","pattern":r"(checkout_ui_extension|checkout\\.ui\\.render|customer-account-ui)","message":"Checkout/customer-account extension detected; verify current extension API."}
 ]
-EXT={".js",".jsx",".ts",".tsx",".py",".rb",".php",".go",".java",".kt",".graphql",".gql",".json",".toml",".yml",".yaml",".md"}
+EXT={".js",".jsx",".ts",".tsx",".py",".rb",".php",".go",".java",".kt",".dart",".cs",".graphql",".gql",".json",".toml",".yml",".yaml",".md"}
 def scan(root):
  out=[]
  for p in Path(root).rglob("*"):
