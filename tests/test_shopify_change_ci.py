@@ -19,6 +19,27 @@ class ShopifyChangeCITests(unittest.TestCase):
             self.assertIn("rest-admin-products", rules)
             self.assertTrue(any(f["severity"] == "high" for f in findings))
 
+    def test_detects_september_2026_events_breaking_changes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "events.ts").write_text(
+                'const eventId = headers.get("shopify-event-id");\n'
+                'payload.fields_changed.forEach(handleField);\n',
+                encoding="utf-8",
+            )
+            rules = {f["rule"] for f in scan(root)}
+            self.assertIn("events-removed-id-header", rules)
+            self.assertIn("events-fields-changed-array", rules)
+
+    def test_accepts_new_fields_changed_shape(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "events.ts").write_text(
+                'for (const field of payload.fields_changed.updated) handleField(field);\n',
+                encoding="utf-8",
+            )
+            self.assertNotIn("events-fields-changed-array", {f["rule"] for f in scan(root)})
+
     def test_ignores_vendor_and_node_modules(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
