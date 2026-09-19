@@ -30,35 +30,44 @@ def scan(root):
     return out
 
 def write_report(findings, output_file):
-    counts={severity:sum(1 for x in findings if x["severity"]==severity) for severity in ("high","medium")}
+    groups={}
+    for finding in findings:
+        groups.setdefault((finding["rule"],finding["severity"],finding["message"]),[]).append(finding)
+    counts={severity:sum(1 for (_,s,_) in groups if s==severity) for severity in ("high","medium")}
     risk="HIGH" if counts["high"] else ("MEDIUM" if counts["medium"] else "LOW")
     lines=[
         "# Shopify Breaking-Change Compatibility Report",
         "",
         f"**Overall risk:** {risk}",
-        f"**Findings:** {len(findings)} ({counts['high']} high, {counts['medium']} medium)",
+        f"**Root-cause risks:** {len(groups)} ({counts['high']} high, {counts['medium']} medium)",
+        f"**Affected locations:** {len(findings)}",
         "",
         "## Executive summary",
-        "This static preflight identifies Shopify API/version and integration patterns that should be reviewed before platform changes reach production.",
+        "This static preflight groups repeated code matches into root-cause compatibility risks so remediation can be prioritized without inflating the issue count.",
         "",
-        "## Prioritized findings",
+        "## Prioritized risks",
     ]
-    if not findings:
+    if not groups:
         lines += ["No configured compatibility risks were detected.", ""]
-    for i,x in enumerate(findings,1):
+    ordered=sorted(groups.items(),key=lambda item: (item[0][1]!="high",item[0][0]))
+    for i,((rule,severity,message),items) in enumerate(ordered,1):
         lines += [
-            f"### {i}. {x['rule']} — {x['severity'].upper()}",
-            f"**Location:** `{x['file']}:{x['line']}`",
-            f"**Why it matters:** {x['message']}",
-            f"**Evidence:** `{x['excerpt']}`",
-            "**Recommended action:** Upgrade or migrate the affected Shopify surface, then regression-test the impacted workflow against the target stable API version.",
+            f"### {i}. {rule} — {severity.upper()}",
+            f"**Affected locations:** {len(items)}",
+            f"**Why it matters:** {message}",
+            "**Evidence:**",
+        ]
+        for x in items:
+            lines.append(f"- `{x['file']}:{x['line']}` — `{x['excerpt']}`")
+        lines += [
+            "**Recommended action:** Upgrade or migrate this Shopify surface, then regression-test every affected workflow against the target stable API version.",
             "",
         ]
     lines += [
         "## Recommended next steps",
-        "1. Resolve HIGH findings before the next production release.",
-        "2. Validate MEDIUM findings in a Shopify development store or equivalent regression environment.",
-        "3. Add this scanner to CI so the same risk patterns cannot silently return.",
+        "1. Resolve HIGH root-cause risks before the next production release.",
+        "2. Validate MEDIUM risks in a Shopify development store or equivalent regression environment.",
+        "3. Add this scanner to CI so resolved patterns cannot silently return.",
         "",
         "## Scope and limitations",
         "This is a static compatibility preflight, not proof that an integration will fail. Runtime behavior, Shopify configuration, scopes, app-specific business logic, and external systems require separate regression testing.",
