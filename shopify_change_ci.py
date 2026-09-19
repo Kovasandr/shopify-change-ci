@@ -10,6 +10,8 @@ RULES = [
     {"id":"last-incomplete-checkout","severity":"high","pattern":r"(?<![A-Za-z0-9_])lastIncompleteCheckout(?![A-Za-z0-9_])","message":"Customer.lastIncompleteCheckout usage detected; verify target API and migration path."},
     {"id":"carrier-service-assumption","severity":"medium","pattern":r"(?<![A-Za-z0-9_])carrierService(?:Create|Update)?(?![A-Za-z0-9_])|/carrier_services","message":"Carrier service integration detected; regression-test shipping-profile behavior."},
     {"id":"checkout-ui-extension","severity":"medium","pattern":r"checkout_ui_extension|checkout[.]ui[.]render|customer-account-ui","message":"Checkout/customer-account extension detected; verify current extension API."},
+    {"id":"events-removed-id-header","severity":"high","pattern":r"shopify-(?:event|resource)-id","message":"Shopify Events code depends on an ID header Shopify announced for removal in September 2026. Upgrade the Shopify API package or remove the direct header dependency and regression-test event delivery."},
+    {"id":"events-fields-changed-array","severity":"high","pattern":r"fields_changed\s*(?:\[\s*\d+\s*\]|\.map\s*\(|\.forEach\s*\(|\.length\b)","message":"Shopify Events code appears to treat fields_changed as an array. The September 2026 Events payload uses added/updated/removed collections; migrate parsing and regression-test event handlers."},
 ]
 EXT={".js",".jsx",".ts",".tsx",".py",".rb",".php",".go",".java",".kt",".dart",".cs",".graphql",".gql",".json",".toml",".yml",".yaml",".md"}
 
