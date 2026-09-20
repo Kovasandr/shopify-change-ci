@@ -21,7 +21,7 @@ No Shopify login, API key, package install, or source upload. The scan runs loca
 
 Two confirmed Shopify changes make this check time-sensitive:
 
-- **ScriptTag writes stop:** `scriptTagCreate`, `scriptTagUpdate`, and REST ScriptTag POST/PUT fail on every API version starting October 1. Pinning an older API version does not defer the change.
+- **ScriptTag writes stop:** `scriptTagCreate`, `scriptTagUpdate`, and REST ScriptTag POST/PUT fail on every API version starting October 1. Pinning an older API version does not defer the change. See the [October 1 ScriptTag migration guide](docs/shopify-scripttag-october-1-2026-migration.md).
 - **Old Shopify CLI auth stops for password-protected storefronts:** theme development flows require Shopify CLI `3.84.0+` starting October 1; `3.83.x` and earlier are no longer supported for those flows.
 
 Run the free scanner now. If it finds risk and you want an interpreted migration plan, request the **$99 one-time compatibility audit** below.
