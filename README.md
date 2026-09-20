@@ -4,6 +4,19 @@
 
 Shopify Change CI catches risky Shopify API, ScriptTag, CLI, and checkout integration patterns before they become production incidents.
 
+## 30-second preflight — no install
+
+From the root of a Shopify app repository:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Kovasandr/shopify-change-ci/main/shopify_change_ci.py -o /tmp/shopify_change_ci.py
+python3 /tmp/shopify_change_ci.py . --report shopify-compatibility-report.md
+```
+
+No Shopify login, API key, package install, or source upload. The scan runs locally against your repository. A HIGH-risk finding returns a failing exit code and the Markdown report stays in your repo.
+
+**Found HIGH/MEDIUM risk and want the migration mapped for you? [Request the $99 compatibility audit →](https://github.com/Kovasandr/shopify-change-ci/issues/new?template=audit-request.yml)**
+
 ## October 1 preflight
 
 Two confirmed Shopify changes make this check time-sensitive:
