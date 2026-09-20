@@ -14,6 +14,7 @@ RULES = [
     {"id":"events-fields-changed-array","severity":"high","pattern":r"fields_changed\s*(?:\[\s*\d+\s*\]|\.map\s*\(|\.forEach\s*\(|\.length\b)","message":"Shopify Events code appears to treat fields_changed as an array. The September 2026 Events payload uses added/updated/removed collections; migrate parsing and regression-test event handlers."},
     {"id":"storefront-scripttag-write","severity":"high","pattern":r"(?<![A-Za-z0-9_])scriptTag(?:Create|Update)(?![A-Za-z0-9_])|/(?:script_tags)(?:[.]json|/)","message":"Storefront ScriptTag write usage detected. Shopify will reject ScriptTag create/update operations on every API version starting October 1, 2026; migrate storefront injection before the deadline."},
     {"id":"buyer-journey-intercept","severity":"medium","pattern":r"(?<![A-Za-z0-9_])useBuyerJourneyIntercept(?![A-Za-z0-9_])|\bblock_progress\b","message":"Deprecated checkout UI interception detected. Shopify deprecated useBuyerJourneyIntercept/block_progress in 2026-07; migrate business-rule enforcement to Shopify Functions."},
+    {"id":"shopify-cli-password-store-cutoff","severity":"high","pattern":r"[\"']@shopify/cli[\"']\s*:\s*[\"'][~^]?(?:[0-2]\.\d+\.\d+|3\.(?:[0-7]\d|8[0-3])\.\d+)[\"']","message":"Shopify CLI 3.83.x or older detected. Starting October 1, 2026, password-protected storefront theme development requires Shopify CLI 3.84.0 or later; upgrade the CLI before the cutoff."},
 ]
 EXT={".js",".jsx",".ts",".tsx",".py",".rb",".php",".go",".java",".kt",".dart",".cs",".graphql",".gql",".json",".toml",".yml",".yaml",".md"}
 
