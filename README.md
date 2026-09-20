@@ -53,7 +53,9 @@ You receive:
 **Turnaround target:** within 1 business day after repository access is available.
 
 ### Request an audit
-Open a GitHub issue in this repository with the title **Audit request**. For a public repository, include its GitHub URL. For private code, do not paste source code or credentials into a public issue; use the issue only to request a private handoff.
+**[Request the $99 compatibility audit →](https://github.com/Kovasandr/shopify-change-ci/issues/new?template=audit-request.yml)**
+
+The request form captures the repository, Shopify surface, current symptoms, and private-repository handling. Do not paste source code, tokens, credentials, or other secrets into a public issue.
 
 Payment is arranged only after the repository is confirmed scannable. No payment is required to request the audit.
 
