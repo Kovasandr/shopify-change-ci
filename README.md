@@ -2,7 +2,24 @@
 
 Catch risky Shopify API and checkout integration patterns before they become production incidents.
 
-## MVP
+## Run it in every pull request
+
+Add this to `.github/workflows/shopify-change-ci.yml`:
+
+```yaml
+name: Shopify Change CI
+on: [push, pull_request]
+jobs:
+  compatibility:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Kovasandr/shopify-change-ci@main
+```
+
+No API key, account, package install, or Shopify credentials required. A HIGH-risk finding fails CI and the scanner can also generate a Markdown compatibility report.
+
+## Local MVP
 Zero-dependency Python scanner. Point it at a Shopify app repository and it reports risky files/lines and returns a failing CI exit code for high-severity findings.
 
 ```bash
@@ -11,7 +28,7 @@ python shopify_change_ci.py . --json
 python shopify_change_ci.py . --report compatibility-report.md
 ```
 
-Currently checks for old API versions, legacy REST product/variant calls, PriceRule usage, Customer Account checkout assumptions, carrier-service integrations, and checkout/customer-account extensions.
+Currently checks for old API versions, legacy REST product/variant calls, PriceRule usage, Customer Account checkout assumptions, carrier-service integrations, checkout/customer-account extensions, and September 2026 Shopify Events breaking-change patterns.
 
 ## Example audit
 A real-world sample report generated from a public Shopify integration is available at [`examples/pod-autopilot-sample-report.md`](examples/pod-autopilot-sample-report.md). It shows the output buyers receive: overall risk, concrete file/line evidence, prioritized findings, remediation, next steps, and scope limitations.
