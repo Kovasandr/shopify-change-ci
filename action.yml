@@ -1,0 +1,21 @@
+name: "Shopify Change CI"
+description: "Fail CI when risky Shopify API and checkout compatibility patterns are detected."
+author: "Shopify Change CI"
+branding:
+  icon: "shield"
+  color: "green"
+inputs:
+  path:
+    description: "Repository path to scan"
+    required: false
+    default: "."
+  report:
+    description: "Markdown report path"
+    required: false
+    default: "shopify-compatibility-report.md"
+runs:
+  using: "composite"
+  steps:
+    - name: Run Shopify compatibility scan
+      shell: bash
+      run: python3 "${{ github.action_path }}/shopify_change_ci.py" "${{ inputs.path }}" --report "${{ inputs.report }}"
