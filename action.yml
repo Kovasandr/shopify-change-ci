@@ -18,4 +18,14 @@ runs:
   steps:
     - name: Run Shopify compatibility scan
       shell: bash
-      run: python3 "${{ github.action_path }}/shopify_change_ci.py" "${{ inputs.path }}" --report "${{ inputs.report }}"
+      run: |
+        set +e
+        python3 "${{ github.action_path }}/shopify_change_ci.py" "${{ inputs.path }}" --report "${{ inputs.report }}"
+        status=$?
+        set -e
+
+        if [ -f "${{ inputs.report }}" ]; then
+          cat "${{ inputs.report }}" >> "$GITHUB_STEP_SUMMARY"
+        fi
+
+        exit "$status"
