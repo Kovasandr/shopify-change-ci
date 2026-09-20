@@ -12,6 +12,8 @@ RULES = [
     {"id":"checkout-ui-extension","severity":"medium","pattern":r"checkout_ui_extension|checkout[.]ui[.]render|customer-account-ui","message":"Checkout/customer-account extension detected; verify current extension API."},
     {"id":"events-removed-id-header","severity":"high","pattern":r"shopify-(?:event|resource)-id","message":"Shopify Events code depends on an ID header Shopify announced for removal in September 2026. Upgrade the Shopify API package or remove the direct header dependency and regression-test event delivery."},
     {"id":"events-fields-changed-array","severity":"high","pattern":r"fields_changed\s*(?:\[\s*\d+\s*\]|\.map\s*\(|\.forEach\s*\(|\.length\b)","message":"Shopify Events code appears to treat fields_changed as an array. The September 2026 Events payload uses added/updated/removed collections; migrate parsing and regression-test event handlers."},
+    {"id":"storefront-scripttag-write","severity":"high","pattern":r"(?<![A-Za-z0-9_])scriptTag(?:Create|Update)(?![A-Za-z0-9_])|/(?:script_tags)(?:[.]json|/)","message":"Storefront ScriptTag write usage detected. Shopify will reject ScriptTag create/update operations on every API version starting October 1, 2026; migrate storefront injection before the deadline."},
+    {"id":"buyer-journey-intercept","severity":"medium","pattern":r"(?<![A-Za-z0-9_])useBuyerJourneyIntercept(?![A-Za-z0-9_])|\bblock_progress\b","message":"Deprecated checkout UI interception detected. Shopify deprecated useBuyerJourneyIntercept/block_progress in 2026-07; migrate business-rule enforcement to Shopify Functions."},
 ]
 EXT={".js",".jsx",".ts",".tsx",".py",".rb",".php",".go",".java",".kt",".dart",".cs",".graphql",".gql",".json",".toml",".yml",".yaml",".md"}
 
