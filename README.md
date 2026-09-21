@@ -15,6 +15,8 @@ python3 /tmp/shopify_change_ci.py . --report shopify-compatibility-report.md
 
 No Shopify login, API key, package install, or source upload. The scan runs locally against your repository. A HIGH-risk finding returns a failing exit code and the Markdown report stays in your repo.
 
+**Don't want to run it yourself? [Request a free scan of a public repo →](https://github.com/Kovasandr/shopify-change-ci/issues/new?template=free-scan.yml)**
+
 **Found HIGH/MEDIUM risk and want the migration mapped for you? [Request the $99 compatibility audit →](https://github.com/Kovasandr/shopify-change-ci/issues/new?template=audit-request.yml)**
 
 ## October 1 preflight
