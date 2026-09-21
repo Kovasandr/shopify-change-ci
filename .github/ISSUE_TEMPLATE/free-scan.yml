@@ -1,0 +1,45 @@
+name: Free Shopify Repo Scan
+description: Get a free compatibility preflight on a public Shopify app repository before October 1.
+title: "Free scan: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Free Shopify compatibility preflight
+        Submit a public repository and get a compatibility preflight for known Shopify breaking-change patterns. No payment, Shopify login, API key, or source upload is required.
+
+        If the scan finds material risk, you can optionally request the $99 interpreted compatibility audit. There is no obligation to buy.
+
+        **Do not paste credentials, tokens, secrets, or private source code into this issue.**
+  - type: input
+    id: repository
+    attributes:
+      label: Public repository URL
+      description: The public Shopify app repository to scan.
+      placeholder: https://github.com/owner/repository
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Main Shopify surface
+      options:
+        - App / Admin API
+        - Online Store / Theme
+        - Checkout / Customer Accounts
+        - Multiple / Not sure
+    validations:
+      required: true
+  - type: textarea
+    id: concern
+    attributes:
+      label: Optional concern
+      description: Mention an API upgrade, ScriptTag usage, CLI issue, checkout change, or other compatibility concern.
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: Confirmation
+      options:
+        - label: This repository is public and I have not included credentials, tokens, secrets, or private source code in this issue.
+          required: true
