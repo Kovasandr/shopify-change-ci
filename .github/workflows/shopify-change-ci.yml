@@ -8,5 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run Shopify compatibility preflight
-        run: python shopify_change_ci.py . --json
+      - name: Run scanner test suite
+        run: python -m unittest discover -s tests -v
+      - name: Smoke-test CLI on a clean fixture
+        run: |
+          mkdir -p /tmp/shopify-change-ci-clean
+          printf '%s\n' 'const app = "shopify";' > /tmp/shopify-change-ci-clean/app.js
+          python shopify_change_ci.py /tmp/shopify-change-ci-clean --json
