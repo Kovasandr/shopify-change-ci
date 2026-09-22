@@ -19,6 +19,14 @@ No Shopify login, API key, package install, or source upload. The scan runs loca
 
 **Found HIGH/MEDIUM risk and want the migration mapped for you? [Request the $99 compatibility audit →](https://github.com/Kovasandr/shopify-change-ci/issues/new?template=audit-request.yml)**
 
+## Why scan the repo, not only the storefront?
+
+A storefront check can tell you what a store loads **today**. It cannot prove that your app's install, reinstall, or update path is safe after Shopify disables ScriptTag writes.
+
+On October 1, `scriptTagCreate`, `scriptTagUpdate`, and REST ScriptTag POST/PUT stop working on every API version while existing ScriptTags keep running. That creates a dangerous false-green case: an existing merchant can look healthy while the same app fails to set up its storefront behavior for a new merchant.
+
+Shopify Change CI checks the code path before that failure reaches a store. Use a storefront audit to inventory what is live; use this repo preflight to catch legacy create/update logic you still ship.
+
 ## October 1 preflight
 
 Two confirmed Shopify changes make this check time-sensitive:
