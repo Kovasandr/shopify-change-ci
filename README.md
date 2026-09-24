@@ -1,6 +1,6 @@
 # Shopify Change CI
 
-**Shopify breaks two developer workflows on October 1, 2026. Check your repo before the deadline.**
+**Will your Shopify app still install correctly after October 1, 2026? Check the repo before the deadline.**
 
 Shopify Change CI catches risky Shopify API, ScriptTag, CLI, and checkout integration patterns before they become production incidents.
 
@@ -25,7 +25,9 @@ A storefront check can tell you what a store loads **today**. It cannot prove th
 
 On October 1, `scriptTagCreate`, `scriptTagUpdate`, and REST ScriptTag POST/PUT stop working on every API version while existing ScriptTags keep running. That creates a dangerous false-green case: an existing merchant can look healthy while the same app fails to set up its storefront behavior for a new merchant.
 
-Shopify Change CI checks the code path before that failure reaches a store. Use a storefront audit to inventory what is live; use this repo preflight to catch legacy create/update logic you still ship.
+**The fastest regression test is a fresh-install question:** if a brand-new merchant installs your app on October 2, does every storefront feature still initialize without `scriptTagCreate` or `scriptTagUpdate`? Shopify Change CI scans the code path that answers that question.
+
+Use a live-store ScriptTag auditor to inventory what is already installed. Use Shopify Change CI to catch legacy create/update logic still shipped in the repository. They solve different failure modes.
 
 ## October 1 preflight
 
